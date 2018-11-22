@@ -1,128 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void menu(int *v, int n)
-{
-    int escolha,x,bin;
-    printf("Faca suas escolhas :\n");
-    printf("Crescentes : Bubble com aritimetica = 1 / Bubble sem aritimetica = 2\n");
-    printf("             Insertion com aritimetica = 3 / Insertion sem aritimetica = 4\n");
-    printf("             Selection sem aritimetica = 5 / Selection com aritimetica = 6\n\n");
-    printf("Decrescentes : Bubble com aritimetica = 7 / Bubble sem aritimetica = 8\n");
-    printf("             Insertion com aritimetica = 9 / Insertion sem aritimetica = 10\n");
-    printf("             Selection sem aritimetica = 11 / Selection com aritimetica = 12\n");
-    printf("\n             Busca Sequencial = 13\n");
-    scanf("%d", &escolha);
-
-    switch(escolha){
-
-        case 1:
-            bubble_crescente_art(v,n);
-            break;
-        case 2:
-            bubble_crescente(v,n);
-            break;
-        case 3:
-            insertion_crescente_art(v,n);
-            break;
-        case 4:
-            insertion_crescente(v,n);
-            break;
-        case 5:
-            selection_crescente(v,n);
-            break;
-        case 6:
-            selection_crescente_art(v,n);
-            break;
-        case 7:
-                bubble_decrescente_art(v,n);
-            break;
-        case 8:
-                bubble_decrescente(v,n);
-            break;
-        case 9:
-                insertion_decrescente_art(v,n);
-            break;
-        case 10:
-                insertion_decrescente(v,n);
-            break;
-        case 11:
-                selection_decrescente(v,n);
-            break;
-        case 12:
-                selection_decrescente_art(v,n);
-            break;
-        case 13:
-            printf("Qual elemento deseja encontrar ?\n");
-            scanf("%d", &x);
-                if (buscaSeq(v,n,x))
-                    printf("O elemento %d esta no vetor!\n", x);
-                else
-                    printf("O elemento %d NAO esta no vetor!\n", x);
-            break;
-        default:
-            printf("Valor indisponivel!\n\n");
-            main();
-            break;
-    }
-    //  Vetor ordenado crescente
-    if ((escolha>=1)&&(escolha<7))
-    {
-        printf("Deseja fazer uma busca binaria ? sim = 1 / nao = 2\n");
-        scanf("%d", &bin);
-        if (bin==1)
-        {
-            printf("Qual elemento deseja encontrar ?\n");
-            scanf("%d", &x);
-                    if (buscaBin_cresc(v,n,x))
-                        printf("O elemento %d esta no vetor!\n", x);
-                    else
-                        printf("O elemento %d NAO esta no vetor!\n", x);
-        }
-        else if (bin==2)
-        {
-            return 0;
-        }
-        else {
-            printf("Valor indisponivel");
-            return 0;
-        }
-    }
-    // Vetor ordenado decrescente
-
-    if ((escolha>=7)&&(escolha<13))
-    {
-        printf("Deseja fazer uma busca binaria ? sim = 1 / nao = 2\n");
-        scanf("%d", &bin);
-        if (bin==1)
-        {
-            printf("Qual elemento deseja encontrar ?\n");
-            scanf("%d", &x);
-                    if (buscaBin_decresc(v,n,x))
-                        printf("O elemento %d esta no vetor!\n", x);
-                    else
-                        printf("O elemento %d NAO esta no vetor!\n", x);
-        }
-        else if (bin==2)
-        {
-            return 0;
-        }
-        else {
-            printf("Valor indisponivel");
-            return 0;
-        }
-    }
-}
-
 void aloc(int *v,int n)
 {
     v=malloc(n*sizeof(int));
 }
 
-void testeMALLOC(int *v)
+void malloc_verifica(int *v)
 {
     if(v==NULL){
-		printf("Memoria Insuficiente!");
+		printf("Memoria Insuficiente");
 		exit (1);
 	}
 }
@@ -131,32 +18,46 @@ void ler(int *v, int n)
 {
     int i;
     aloc(v,n);
-    testeMALLOC(v);
-    printf("Fa�a a leitura do vetor : \n");
-    for (i=0;i<n;i++)
+    malloc_verifica(v);
+    printf("\nEscreva os elementos:\n");
+    for(i=0;i<n;i++)
     {
         scanf("%d", (v+i));
     }
 }
 
-void print(int *v, int n)
+void imprimir(int *v, int n)
 {
     int i;
-    printf("Seu vetor: ");
-    for (i=0;i<n;i++)
-    {
-        printf("%d\t", *(v+i));
+    printf("\nVetor:\n");
+    for(i=0;i<n;i++){
+        printf("%d\n", *(v+i));
     }
-    printf("\n");
 }
 
-int bubble_crescente_art(int *v, int n)
+void BubbleSort_inc(int v[], int n)
 {
-
     int i,j,aux;
-    for (i=0;i<(n-1);i++)
+    for(i=0;i<n;i++)
     {
-        for (j=0;j<(n-i-1);j++)
+        for(j=0;j<n;j++)
+        {
+            if(v[j]>v[j+1])
+            {
+                aux=v[j];
+                v[j]=v[j+1];
+                v[j+1]=aux;
+            }
+        }
+    }
+}
+
+void BubbleSort_inc_art(int *v, int n)
+{
+    int i,j,aux;
+    for (i=0;i<n;i++)
+    {
+        for (j=0;j<n;j++)
         {
             if (*(v+j)>*(v+j+1))
             {
@@ -166,50 +67,9 @@ int bubble_crescente_art(int *v, int n)
             }
         }
     }
-
-    return 0;
 }
 
-int bubble_crescente(int v[], int n)
-{
-    int i,j,aux;
-    for (i=0;i<(n-1);i++)
-    {
-        for (j=0;j<(n-i-1);j++)
-        {
-            if (v[j]>v[j+1])
-            {
-                aux=v[j];
-                v[j]=v[j+1];
-                v[j+1]=aux;
-            }
-        }
-    }
-
-    return 0;
-}
-
-int bubble_decrescente_art(int *v, int n)
-{
-
-    int i,j,aux;
-    for (i=0;i<(n-1);i++)
-    {
-        for (j=0;j<(n-i-1);j++)
-        {
-            if (*(v+j)<*(v+j+1))
-            {
-                aux=*(v+j);
-                *(v+j)=*(v+j+1);
-                *(v+j+1)=aux;
-            }
-        }
-    }
-
-    return 0;
-}
-
-int bubble_decrescente(int v[], int n)
+void BubbleSort_dec(int v[], int n)
 {
     int i,j,aux;
     for (i=0;i<(n-1);i++)
@@ -224,177 +84,197 @@ int bubble_decrescente(int v[], int n)
             }
         }
     }
-
-    return 0;
 }
 
-void insertion_crescente(int v[], int n )
+void BubbleSort_dec_art(int *v, int n)
 {
     int i,j,aux;
-    for (i=1;i<n;i++)
+    for (i=0;i<(n-1);i++)
     {
-        aux=v[i];
-        j=i-1;
-        while((j>=0)&&(v[j]>aux))
+        for (j=0;j<(n-i-1);j++)
         {
-            v[j+1]=v[j];
-            j--;
+            if (*(v+j)<*(v+j+1))
+            {
+                aux=*(v+j);
+                *(v+j)=*(v+j+1);
+                *(v+j+1)=aux;
+            }
         }
-        v[j+1]=aux;
     }
 }
 
-void insertion_crescente_art(int *v, int n )
+void SelectionSort_inc(int v[], int n)
 {
-    int i,j,aux;
-    for (i=1;i<n;i++)
-    {
-        aux=*(v+i);
-        j=i-1;
-        while((j>=0)&&(*(v+j)>aux))
-        {
-            *(v+j+1)=*(v+j);
-            j--;
-        }
-        *(v+j+1)=aux;
-    }
-}
-void insertion_decrescente(int v[], int n )
-{
-    int i,j,aux;
-    for (i=1;i<n;i++)
-    {
-        aux=v[i];
-        j=i-1;
-        while((j>=0)&&(v[j]<aux))
-        {
-            v[j+1]=v[j];
-            j--;
-        }
-        v[j+1]=aux;
-    }
-}
-
-void insertion_decrescente_art(int *v, int n )
-{
-    int i,j,aux;
-    for (i=1;i<n;i++)
-    {
-        aux=*(v+i);
-        j=i-1;
-        while((j>=0)&&(*(v+j)<aux))
-        {
-            *(v+j+1)=*(v+j);
-            j--;
-        }
-        *(v+j+1)=aux;
-    }
-}
-
-void selection_crescente(int v[],int n)
-{
-    int i,j,menor,aux=0;
+    int i,j,min,aux=0;
     for (i=0; i<(n-1); i++)
     {
-        menor=i;
+        min=i;
         for (j=(i+1); j<n; j++)
         {
-            if (v[j]<v[menor])
+            if (v[j]<v[min])
             {
-                menor=j;
+                min=j;
             }
         }
 
-        if (i!=menor)
+        if (i!=min)
         {
             aux=v[i];
-            v[i]=v[menor];
-            v[menor]=aux;
+            v[i]=v[min];
+            v[min]=aux;
         }
     }
 }
-void selection_crescente_art(int *v,int n)
+void SelectionSort_inc_art(int *v, int n)
 {
-    int i,j,menor,aux=0;
+    int i,j,min,aux=0;
     for (i=0; i<(n-1); i++)
     {
-        menor=i;
+        min=i;
         for (j=(i+1); j<n; j++)
         {
-            if (*(v+j)<*(v+menor))
+            if (*(v+j)<*(v+min))
             {
-                menor=j;
+                min=j;
             }
         }
 
-        if (i!=menor)
+        if (i!=min)
         {
             aux=*(v+i);
-            *(v+i)=*(v+menor);
-            *(v+menor)=aux;
+            *(v+i)=*(v+min);
+            *(v+min)=aux;
         }
     }
 }
-void selection_decrescente(int v[],int n)
+
+void SelectionSort_dec(int v[], int n)
 {
-    int i,j,menor,aux=0;
+    int i,j,min,aux=0;
     for (i=0; i<(n-1); i++)
     {
-        menor=i;
+        min=i;
         for (j=(i+1); j<n; j++)
         {
-            if (v[j]>v[menor])
+            if (v[j]>v[min])
             {
-                menor=j;
+                min=j;
             }
         }
 
-        if (i!=menor)
+        if (i!=min)
         {
             aux=v[i];
-            v[i]=v[menor];
-            v[menor]=aux;
+            v[i]=v[min];
+            v[min]=aux;
         }
     }
 }
-
-void selection_decrescente_art(int *v,int n)
+void SelectionSort_dec_art(int *v, int n)
 {
-    int i,j,menor,aux=0;
+    int i,j,min,aux=0;
     for (i=0; i<(n-1); i++)
     {
-        menor=i;
+        min=i;
         for (j=(i+1); j<n; j++)
         {
-            if (*(v+j)>*(v+menor))
+            if (*(v+j)>*(v+min))
             {
-                menor=j;
+                min=j;
             }
         }
 
-        if (i!=menor)
+        if (i!=min)
         {
             aux=*(v+i);
-            *(v+i)=*(v+menor);
-            *(v+menor)=aux;
+            *(v+i)=*(v+min);
+            *(v+min)=aux;
         }
     }
 }
 
-int buscaSeq(int *v, int n, int x)
+void InsertionSort_inc (int v[], int n)
 {
-    int i;
-    for(i=0;i<n;i++)
-    {
-        if (v[i]==x)
-        {
-            return 1;
-        }
-    }
-    return 0;
+   int i, aux, j;
+   for (i=1;i<n;i++)
+   {
+       aux = v[i];
+       j = i-1;
+
+       while (j>=0 && v[j]>aux)
+       {
+           v[j+1] = v[j];
+           j = j-1;
+       }
+       v[j+1] = aux;
+   }
 }
 
-int buscaBin_cresc(int *v, int n, int x)
+void InsertionSort_inc_art(int *v, int n)
+{
+    int i, aux, j;
+    for (i=1;i<n;i++)
+    {
+        aux = *(v+i);
+        j = i-1;
+
+        while (j>=0 && *(v+j)>aux)
+        {
+            *(v+j+1) = *(v+j);
+            j = j-1;
+        }
+        *(v+j+1) = aux;
+    }
+}
+
+void InsertionSort_dec (int v[], int n)
+{
+   int i, aux, j;
+   for (i=1;i<n;i++)
+   {
+       aux = v[i];
+       j = i-1;
+
+       while (j>=0 && v[j]<aux)
+       {
+           v[j+1] = v[j];
+           j = j-1;
+       }
+       v[j+1] = aux;
+   }
+}
+
+void InsertionSort_dec_art(int *v, int n)
+{
+    int i, aux, j;
+    for (i=1;i<n;i++)
+    {
+        aux = *(v+i);
+        j = i-1;
+
+        while (j>=0 && *(v+j)<aux)
+        {
+            *(v+j+1) = *(v+j);
+            j = j-1;
+        }
+        *(v+j+1) = aux;
+    }
+}
+
+int BuscaSeq(int n, int v[],int p)
+{
+ int i;
+ for(i=0;i<=n;i++)
+ {
+  if(v[i]==p){
+   return 1;
+   }
+ }
+ return 0;
+
+}
+
+int BuscaBin_inc(int *v, int n, int x)
 {
     int i,m,f;
     i=0;
@@ -416,7 +296,7 @@ int buscaBin_cresc(int *v, int n, int x)
     return 0;
 }
 
-int buscaBin_decresc(int *v, int n, int x)
+int BuscaBin_dec(int *v, int n, int x)
 {
     int i,m,f;
     i=0;
@@ -437,24 +317,135 @@ int buscaBin_decresc(int *v, int n, int x)
     }
     return 0;
 }
-int main()
-{
 
-    int n,i,again;
-    printf("Qual o tamanho do seu vetor?\n");
-    scanf("%d", &n);
-    int v[n],adm;
-    ler(v,n);
-    menu(v,n);
-    print(v,n);
-    free(v);
-    *v=NULL;
-    printf("Deseja fazer outra operacao ? sim = 1 / nao = 2\n");
-    scanf("%d", &again);
-    system("cls"); // limpa a tela para iniciar novamente
-    again==1 ? main() : exit(0);
-    return 0;
+void opcao_invalida(int op)
+{
+    if(((op!=1)&&(op!=2)&&(op!=3))||((op!=1)&&(op!=2))){
+        printf("\nOpcao invalida!\n");
+        nova_operacao();
+    }
+
+}
+void nova_operacao()
+{
+    int nova;
+    printf("\nDeseja realizar outra operacao?");
+    printf("\n1-Sim\n2-Nao\n");
+    scanf("%d", &nova);
+    if (nova==1){
+        system("cls");
+        main();
+    }
+    else if (nova==2){
+        exit(0);
+    }
+    else
+        printf("\nOpcao invalida!\n");
+        nova_operacao();
 }
 
 
+int main()
+{
+    int met,cres,arit,n,busca,x;
+    printf("Escolha o metodo de ordenacao:\n");
+    printf("1- Bubble Sort\n2- Selection Sort\n3- Insertion Sort\n");
+    scanf("%d", &met);
+    opcao_invalida(met);
+    printf("\nTamanho do vetor:\n");
+    scanf("%d", &n);
+    int v[n];
+    ler(v,n);
+    printf("\nCrescente ou decrescente?\n");
+    printf("1-Crescente\n2-Decrescente\n");
+    scanf("%d", &cres);
+    opcao_invalida(cres);
+    printf("\nCom ou sem aritmetica?\n");
+    printf("1-Com\n2-Sem\n");
+    scanf("%d", &arit);
+    opcao_invalida(arit);
+        switch (met)
+        {
+            case 1:
+                if((cres==1)&&(arit==1)){
+                    BubbleSort_inc_art(v,n);
+                }
+                else if ((cres==1)&&(arit==2)){
+                    BubbleSort_inc(v,n);
+                }
+                else if ((cres==2)&&(arit==1)){
+                    BubbleSort_dec_art(v,n);
+                }
+                else if ((cres==2)&&(arit==2)){
+                    BubbleSort_dec(v,n);
+                }
+                else
+                    printf("\nOpcoes invalidas!");
+                break;
+            case 2:
+                if((cres==1)&&(arit==1)){
+                    SelectionSort_inc_art(v,n);
+                }
+                else if ((cres==1)&&(arit==2)){
+                    SelectionSort_inc(v,n);
+                }
+                else if ((cres==2)&&(arit==1)){
+                    SelectionSort_dec_art(v,n);
+                }
+                else if ((cres==2)&&(arit==2)){
+                    SelectionSort_dec(v,n);
+                }
+                break;
+
+            case 3:
+                if((cres==1)&&(arit==1)){
+                    InsertionSort_inc_art(v,n);
+                }
+                else if ((cres==1)&&(arit==2)){
+                    InsertionSort_inc(v,n);
+                }
+                else if ((cres==2)&&(arit==1)){
+                    InsertionSort_dec_art(v,n);
+                }
+                else if ((cres==2)&&(arit==2)){
+                    InsertionSort_dec(v,n);
+                }
+                break;
+
+            default:
+                printf("\nOpcao invalida!");
+
+        }
+    imprimir(v,n);
+    printf("\nGostaria de fazer uma busca sequencial ou binaria?\n");
+    printf("1-Sequencial\n2-Binaria\n3-Nao fazer busca\n");
+    scanf("%d", &busca);
+    opcao_invalida(busca);
+    printf("\nQual valor deseja buscar?\n");
+    scanf("%d",&x);
+    switch(busca){
+        case 1:
+            if (BuscaSeq(n,v,x))
+                printf("\nO elemento [%d] se encontra no vetor\n", x);
+            else
+                printf("\nO elemento [%d] não se encontra no vetor\n", x);
+            break;
+
+        case 2:
+            if (cres==1){
+                if(BuscaBin_inc(v,n,x))
+                    printf("\nO elemento [%d] se encontra no vetor\n", x);
+                else
+                    printf("\nO elemento [%d] não se encontra no vetor\n", x);
+            }
+            else if (cres==2){
+                if(BuscaBin_dec(v,n,x))
+                    printf("\nO elemento [%d] se encontra no vetor\n", x);
+                else
+                    printf("\nO elemento [%d] não se encontra no vetor\n", x);
+            }
+            break;
+    }
+    nova_operacao();
+}
 
